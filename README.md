@@ -89,6 +89,27 @@ The frontend will typically run on `http://localhost:5173`, the PHP API on `http
 npm run build
 ```
 
+## Vercel Deployment
+
+The repository includes a multi-service [`vercel.json`](./vercel.json):
+
+- `app` is the public Vite frontend at `/`.
+- `fingerprint-bridge` is an internal service definition, but it cannot access a
+  USB scanner when deployed on Vercel. Run the bridge locally on the attendance
+  computer instead.
+- The PHP API under `backend/` remains an external service and is not deployed
+  by Vercel.
+
+In the Vercel project settings, add this production environment variable:
+
+```text
+VITE_API_URL=https://your-php-api-domain.com/api
+```
+
+Configure the PHP API's `CORS_ORIGIN` value to the Vercel app URL. If the PHP
+API calls the local fingerprint bridge, keep its `FINGERPRINT_BRIDGE_URL`
+pointing to the bridge running on the attendance computer.
+
 ## Notes
 
 - Sensitive configuration values should remain in local environment files and are ignored by Git.
